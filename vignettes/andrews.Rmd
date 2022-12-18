@@ -1,0 +1,209 @@
+---
+title: "andrews"
+author: 
+- name: "Sigbert Klinke" 
+  email: sigbert@hu-berlin.de
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+vignette: > 
+  %\VignetteIndexEntry{andrews} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc} 
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(andrews)
+```
+
+# General 
+
+The `andrews` routine, implemented by Jaroslav Myslivec, has been rewritten and extended. The old routine is still available as `andrews0` and the rewritten routine should give the same graphics with the same parameter values.
+
+```{r, eval=FALSE}
+op <- par(mfrow=c(1,2))
+andrews0(iris, main="andrews0")
+andrews(iris, main="andrews")
+par(op)
+```
+
+```{r, echo=FALSE}
+op <- par(mfrow=c(1,2))
+andrews0(iris, main="andrews0")
+andrews(iris, main="andrews")
+par(op)
+```
+
+New types of curves has been added:
+
+* `5`: $f(t)=x_1\cos(\sqrt{p_0}t)+x_2\cos(\sqrt{p_1}t)+x_3\cos(\sqrt{p_2}t)+...$, and
+* `6`: $f(t)=\frac{1}{\sqrt{2}}(x_1+x_2(\sin(t)+\cos(t))+x_3(\sin(t)-\cos(t))+x_4(\sin(2t)+\cos(2t))+x_5(\sin(2t)-\cos(2t))+...$.
+
+with $p_0=1$ and $p_i$ the $i$-th prime number.
+
+To see more comparisons of `andrews` and `andrews0`, run interactively
+
+```{r, eval=FALSE}
+zzz()
+```
+
+# Extensions
+
+The parameters specified in `...` are passed to `plot` to plot the base window:
+
+* The parameters `x`, `y`, and `type` cannot be set by the user, 
+* but available user parameters are `main`, `sub`, `xlim`, `ylim`, `xlab`, `ylab`, `axes`, `asp` and possibly other parameters.
+
+Note that the setting of `ylim` has priority over the setting of `ymax`.
+
+## Scaling the window height and width
+
+The height of the window can be scaled by setting `ymax` or `ylim`.
+
+1. If `ymax` is not set then `ylim=c(-10,10)` is used.
+1. if `ymax` is set to zero or less, then `ylim=c(-lim,lim)` is used with 
+$$\texttt{lim} =\begin{cases}p\sqrt2 & \text{ if }\texttt{type %in% c(4,6)} \\ p & \text{ otherwise} \end{cases}$$
+1. if `ymax` is set to `NA`, then `ylim=c(-lim,lim)`, where the maximum height `lim` is calculated from the curves. Note that this option doubles the calculation time.
+1. by setting `ylim` directly.
+
+```{r, eval=FALSE}
+op<-par(mfrow=c(2,2))
+andrews(iris, main="no ymax")
+andrews(iris, ymax=0, main="ymax=0")
+andrews(iris, ymax=NA, main="ymax=NA")
+andrews(iris, ylim=c(-1,3), main="ylim=c(-1,3)")
+par(op)
+```
+
+```{r, echo=FALSE}
+op<-par(mfrow=c(2,2))
+andrews(iris, main="no ymax")
+andrews(iris, ymax=0, main="ymax=0")
+andrews(iris, ymax=NA, main="ymax=NA")
+andrews(iris, ylim=c(-1,3), main="ylim=c(-1,3)")
+par(op)
+```
+
+The width of the window can be scaled by setting `xlim`, which is particularly useful for `type==3` or `type==5`.
+
+```{r}
+andrews(iris, type=3, xlim=c(0,6*pi), ymax=NA)
+```
+
+## Line type and width
+
+The parameters `lty` and `lwd` determine the linetype and width. The length of the parameters must be either `1` or `nrow(df)`. In the first case the values are applied to each curve, in the second case `lty[i]` and `lwd[i]` are used for the `i`th line.
+
+```{r}
+andrews(iris, ymax=NA, lwd=3)
+```
+
+## Colouring the curves
+
+The curves can be coloured individually if `length(clr)==nrow(df)`.
+
+```{r}
+andrews(iris, ymax=NA, clr=rainbow(nrow(iris)))
+```
+
+By default, the curves are coloured by a variable of the data frame. 
+
+```{r}
+andrews(iris, ymax=NA, clr=5) # iris$Species
+```
+
+If `is.numeric(df[,clr])` is `FALSE` then `rainbow(nuv)` is used for the colours, where `nuv` is the number of unique values (`nuv = length(unique(df[,clr])`). You can use `palcol` to select another palette that gives `nuv` colours.
+
+```{r}
+andrews(iris, ymax=NA, clr=5, palcol=hcl.colors) # iris$Species
+```
+
+If `is.numeric(df[,clr])` is `TRUE`, the variable `color(df[,clr])` (scaled to the interval $[0, 1]$) is used. 
+The default is `function(v) { hsv(1,1,v,1) }`, but any other colouring function can be used.
+
+```{r}
+andrews(iris, ymax=NA, clr=1) # iris$Sepal.Length
+```
+
+```{r}
+andrews(iris, ymax=NA, clr=1, palcol=function(v) { gray(v) }) # iris$Sepal.Length
+```
+
+## Alpha compositing/blending of curves
+
+If you plot many curves then the curve details disappear by overplotting. If the output device supports the alpha channel, the parameter `alpha` ($0<\alpha<1$) is applied to all curves (`length(alpha)==1`) or one for each observation (`length(alpha)==nrow(df)`). 
+
+```{r}
+andrews(iris, ymax=NA, alpha=0.1) 
+```
+
+```{r}
+andrews(iris, ymax=NA, clr=5, alpha=0.1, lwd=2)
+```
+
+# Some theoretical properties
+
+The representation of a set of multivariate observations as curves was proposed by Andrews (1972). Currently, six types of curves are implemented, which are determined by the parameter`type`:
+
+1. $f(t)=x_1/\sqrt{2}+x_2\sin(t)+x_3\cos(t)+x_4\sin(2t)+x_5\cos(2t)+...$
+1. $f(t)=x_1\sin(t)+x_2\cos(t)+x_3\sin(2t)+x_4\cos(2t)+...$
+1. $f(t)=x_1\cos(\sqrt{t})+x_2\cos(\sqrt{2t})+x_3\cos(\sqrt{3t})+...$
+1. $f(t)=0.5^{p/2}x_1+0.5^{(p-1)/2} x_2(\sin(t)+\cos(t))+0.5^{(p-2)/2} x_3(\sin(t)-\cos(t))+0.5^{(p-3)/2} x_4(\sin(2t)+\cos(2t))+0.5^{(p-4)/2}x_5(\sin(2t)-\cos(2t))+...$ with $p$ the number of variables
+1. $f(t)=x_1\cos(\sqrt{p_0} t)+x_2\cos(\sqrt{p_1}t)+x_3\cos(\sqrt{p_2}t)+...$ with $p_0=1$ and $p_i$ the i-th prime number
+1. $f(t)=1/\sqrt{2}(x_1+x_2(\sin(t)+\cos(t))+x_3(\sin(t)-\cos(t))+x_4(\sin(2t)+\cos(2t))+x_5(\sin(2t)-\cos(2t))+...)$
+
+For a set of orthonormal basis functions $g_i(t)$  with $i=1, 2, 3, \ldots$ in an interval $[a, b]$ it holds:
+
+$$\int_a^b g_i(t) g_j(t) dt = \delta_{ij} = \begin{cases} 1 & \text{ if } i=j \\ 0 & \text{ if } i\neq j \end{cases}$$
+
+If one creates from multivariate observations $x_i=(x_{i1}, \ldots, x_{ip})$ with $i=1,2,\ldots,n$ a function
+
+$$ f_i(t) = \sum_{k=1}^p x_{ik} g_k(t) $$
+
+then it follows:
+
+__Property 1__ - The integral of the squared difference of two curves is equal to the squared Euclidean distance between the data points $x_i$ and $x_j$: 
+\begin{align*} 
+\int_a^b (f_i(t)-f_j(t))^2 dt & =  \int_a^b  \left(\sum_{k=1}^p (x_{ik}- x_{jk}) g_k(t)\right)^2 dt \\
+&= \sum_{k=1}^p \sum_{l=1}^p  (x_{ik}- x_{jk}) (x_{il}- x_{jl}) \underbrace{\int_a^b  g_k(t)g_l(t) dt}_{= \delta_{kl}}\\
+&= \sum_{k=1}^p (x_{ik}- x_{jk})^2
+\end{align*}
+
+This makes the Andrews curves useful for visualising multivariate outliers and clusters in the data.
+
+None of the basis functions of the six types of Andrews curves form an orthonormal system, but two (`type %in% c(1,2)`) of them form an orthogonal system:
+
+$$\int_{-\pi}^{\pi} g_i(t)g_j(t) dt = \begin{cases} \pi & \text{ if } i=j \\ 0 & \text{ if } i\neq j \end{cases}$$
+Thus, property 1 changes to 
+
+$$ \int_{-\pi}^{\pi} (f_i(t)-f_j(t))^2 dt = \pi \sum_{k=1}^p (x_{ik}- x_{jk})^2$$
+
+__Property 2__ - The average curve is the mean value of the observations:
+
+\begin{align*} 
+ \bar{f}(t) &= \frac1n \sum_{i=1}^n f_i(t) =\frac1n \sum_{i=1}^n \sum_{k=1}^p x_{ik} g_k(t)\\
+ &=\sum_{k=1}^p g_k(t) \left(\frac1n \sum_{i=1}^n x_{ik}\right)\\
+ &=\sum_{k=1}^p g_k(t) \bar{x}_k
+\end{align*}
+
+__Property 3__ - For a given $t$, the variable $P_t=\sum_{k=1}^p X_k w_{kt}$ can be considered as a univariate projection of the variables $X_1$, $X_2$, ..., $X_p$. If $Var(X_k)=\sigma$ and $Cov(X_k,X_l)=\delta_{kl}$ hold then
+
+$$ Var(P_t)= Var\left(\sum_{k=1}^p X_k w_{kt}\right) = \sum_{k=1}^p w_{kt}^2 Var(X_k)$$
+For the curves with `type %in% c(1,2,6)` $Var(P_t)\approx \sigma^2 p/2$ holds, since $\sin^2(t)+\cos^2(t)=1$. For these curves, however, we only cover a subset of the possible one-dimensional projections. 
+
+For `type %in% c(3,5)`, the choice of $\sqrt{p_i}$ ensures that all possible one-dimensional projections are used, but the range $[a,b]$ is not fixed. Usually $a=0$ is chosen and $b$ _"appropriate"_ (in practice $b=4\pi$). 
+
+# References
+
+* Andrews, D. F. (1972), Plots of High-dimensional Data, Biometrics, 28, 125–136.
+* Gnanadesikan, R. (1997). Methods for Statistical Data Analysis of Multivariate Observations, 2nd Edition. Wiley, New York.
+* Khattree, R., Naik, D. N. (2002) Andrews Plots for Multivariate Data: Some New Suggestions and Applications. Journal of Statistical Planning and Inference, 100(2), 411-425.
