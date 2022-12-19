@@ -1,9 +1,10 @@
 #' @title Andrews curves
 #' @aliases andrews
-#' @description Andrews curves for visualization of multidimensional data. For colouring the curves see the details.
-#' For differences between `andrews` and `andrews0` see the `vignette("andrews").
+#' @description Andrews curves for visualization of multidimensional data.
+#' For colouring the curves see the details.
+#' For differences between `andrews` and `andrews0` see the `vignette("andrews")`.
 #' With the same parameters called both functions should create the same plot.
-#' `type==5` is a modification of `type==3` and `type==6` is a modification of `type==4`
+#' `type==5` is a modification of `type==3` and `type==6` is a modification of `type==4`.
 #'
 #' @details
 #' If `clr` has length one then it is used as column number or column name
@@ -42,7 +43,7 @@
 #' * Andrews, D. F. (1972) Plots of High-Dimensional Data. Biometrics, vol. 28, no. 1, pp. 125-136.
 #' * Khattree, R., Naik, D. N. (2002) Andrews Plots for Multivariate Data: Some New Suggestions and Applications. Journal of Statistical Planning and Inference, vol. 100, no. 2, pp. 411-425.
 #' @keywords hplot
-#' @author Jaroslav Myslivec <jaroslav.myslivec@upce.cz>, Sigbert Klinke <sigbert@hu-berlin.de>
+#' @author Sigbert Klinke <sigbert@hu-berlin.de>
 #' @return nothing
 #' @importFrom grDevices hsv rainbow col2rgb rgb
 #' @importFrom graphics plot.default
@@ -125,26 +126,11 @@ andrews <- function(df, type = 1, clr = NULL, step = 100, ymax = 10, alpha=NULL,
     })
   }
   #
-  xrange <- function (type, xlim) {
-    if (is.null(xlim)) {
-      xlim <- c(-pi, pi)
-      if (type %in% c(3,5)) {
-        xlim <- c(0, 4*pi)
-      }
-    }
-    xlim
-  }
-  #
-  yrange <- function(mt, ymax, ylim, type) {
+  yrange <- function(mt, dfm, ymax, ylim) {
     if (is.null(ylim)) {
       if (is.na(ymax)) {
         for (i in 1:ndf) {
           ymax <- range(ymax, mt%*%dfm[i,], na.rm=TRUE)
-        }
-      } else {
-        if (ymax<=0) {
-          ymax <- ncol(mt)
-          if (type %in% c(4,6)) ymax <- sqrt(2)*ymax
         }
       }
       ylim <- max(abs(ymax))*c(-1,1)
@@ -199,13 +185,17 @@ andrews <- function(df, type = 1, clr = NULL, step = 100, ymax = 10, alpha=NULL,
   ## Plot
   # Set up plot
   if (step < 1) step <- 100
+  # type
+  index     <- pmatch(type, names(pkgenv))
+  if(is.na(index)) stop("Unknown type: '%s'", as.character(type))
+  type      <- names(pkgenv)[index]
   #
   args      <- list(...)
-  args$xlim <- xrange(type, args$xlim)
+  args$xlim <- if(is.null(args$xlim)) pkgenv[[type]]$range else args$xlim
   coorx     <- seq(args$xlim[1], args$xlim[2], by=diff(args$xlim)/step)
   #
-  mt        <- typematrix(coorx, ncol(dfm), type)
-  args$ylim <- yrange(mt, ymax, args$ylim, type)
+  mt        <- pkgenv[[type]]$fun(ncol(dfm), coorx) # typematrix(coorx, ncol(dfm), type)
+  args$ylim <- yrange(mt, dfm, ymax, args$ylim)
   if (is.null(args$xlab)) args$xlab <- ""
   if (is.null(args$ylab)) args$ylab <- ""
   args$x <- mean(args$xlim)

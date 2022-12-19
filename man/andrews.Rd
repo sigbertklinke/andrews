@@ -54,8 +54,11 @@ uses ‘invisible lines’ (i.e., does not draw them).}
 nothing
 }
 \description{
-Andrews curves for visualization of multidimensional data. For colouring the curves see the details.
-For differences between \code{andrews} and \code{andrews0} see the \verb{vignette("andrews"). With the same parameters called both functions should create the same plot. }type==5\verb{is a modification of}type==3\code{and}type==6\verb{is a modification of}type==4`
+Andrews curves for visualization of multidimensional data.
+For colouring the curves see the details.
+For differences between \code{andrews} and \code{andrews0} see the \code{vignette("andrews")}.
+With the same parameters called both functions should create the same plot.
+\code{type==5} is a modification of \code{type==3} and \code{type==6} is a modification of \code{type==4}.
 }
 \details{
 If \code{clr} has length one then it is used as column number or column name
@@ -88,6 +91,6 @@ andrews(iris,type=4,clr=5,ymax=NA)
 }
 }
 \author{
-Jaroslav Myslivec \href{mailto:jaroslav.myslivec@upce.cz}{jaroslav.myslivec@upce.cz}, Sigbert Klinke \href{mailto:sigbert@hu-berlin.de}{sigbert@hu-berlin.de}
+Sigbert Klinke \href{mailto:sigbert@hu-berlin.de}{sigbert@hu-berlin.de}
 }
 \keyword{hplot}

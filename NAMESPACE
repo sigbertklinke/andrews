@@ -2,6 +2,7 @@
 
 export(andrews)
 export(andrews0)
+export(deftype)
 export(normalize)
 export(numarray)
 export(selectand)
