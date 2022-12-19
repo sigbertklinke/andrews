@@ -28,6 +28,6 @@ install_github("sigbertklinke/andrews")
 
 # History
 
-2022-12-18 version 1.1.0 
-2022-12-16 new maintainer
-2012-10-29 version 1.0 by Jaroslav Myslivec
+* 2022-12-18 version 1.1.0 
+* 2022-12-16 new maintainer
+* 2012-10-29 version 1.0 by Jaroslav Myslivec

@@ -138,6 +138,12 @@ andrews(iris, ymax=NA, clr=1) # iris$Sepal.Length
 andrews(iris, ymax=NA, clr=1, palcol=function(v) { gray(v) }) # iris$Sepal.Length
 ```
 
+or alternatively
+
+```{r, eval=FALSE}
+andrews(iris, ymax=NA, clr=1, palcol=gray) # iris$Sepal.Length
+```
+
 ## Alpha compositing/blending of curves
 
 If you plot many curves then the curve details disappear by overplotting. If the output device supports the alpha channel, the parameter `alpha` ($0<\alpha<1$) is applied to all curves (`length(alpha)==1`) or one for each observation (`length(alpha)==nrow(df)`). 
