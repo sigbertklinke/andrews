@@ -20,7 +20,7 @@ pkgenv <- new.env()
     }
     m
   })
-  deftype(3, r=c(0, 4*pi), function(n, t) {
+  deftype(3, xlim=c(0, 4*pi), function(n, t) {
     n <- as.integer(if (n<1) 1 else n)
     m <- matrix(NA, nrow=length(t), ncol=n)
     for (i in 1:n) m[,i] <- cos(sqrt(i*t))
@@ -40,7 +40,7 @@ pkgenv <- new.env()
     }
     m
   })
-  deftype(5, r=c(0,4*pi), function(n, t) {
+  deftype(5, xlim=c(0,4*pi), function(n, t) {
     n  <- as.integer(if (n<1) 1 else n)
     pr <- sqrt(c(1, generate_n_primes(n-1)))
     m  <- matrix(NA, nrow=length(t), ncol=n)

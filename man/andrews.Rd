@@ -91,6 +91,6 @@ andrews(iris,type=4,clr=5,ymax=NA)
 }
 }
 \author{
-Sigbert Klinke \href{mailto:sigbert@hu-berlin.de}{sigbert@hu-berlin.de}
+Sigbert Klinke \href{mailto:sigbert@hu-berlin.de}{sigbert@hu-berlin.de}, Jaroslav Myslivec \href{mailto:jaroslav.myslivec@upce.cz}{jaroslav.myslivec@upce.cz}
 }
 \keyword{hplot}

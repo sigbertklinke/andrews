@@ -43,9 +43,7 @@ andrews(iris, main="andrews")
 par(op)
 ```
 
-Some more types of curves has been added.
-
-To see more comparisons of `andrews` and `andrews0`, run interactively
+Some more types of curves has been added. To see more comparisons of `andrews` and `andrews0`, run interactively
 
 ```{r, eval=FALSE}
 zzz()
@@ -53,10 +51,17 @@ zzz()
 
 # Extensions
 
-The parameters specified in `...` are passed to `plot` to plot the base window:
+Full parameter list for `andrews` is:
 
-* The parameters `x`, `y`, and `type` cannot be set by the user, 
-* but available user parameters are `main`, `sub`, `xlim`, `ylim`, `xlab`, `ylab`, `axes`, `asp` and possibly other parameters.
+```{r, eval=FALSE}
+andrews (df, type = 1, clr = NULL, step = 100, ymax = 10,          # old parameters
+         alpha = NULL, palcol = NULL, lwd = 1, lty = "solid", ...) # new parameters
+```
+
+The parameters in the call to `andrews` that come in `...` are passed to `plot` to draw the base window:
+
+* The parameters `x`, and `y` cannot be set by the user through `...`.
+* Available user parameters are `main`, `sub`, `xlim`, `ylim`, `xlab`, `ylab`, `axes`, `asp` and possibly other parameters.
 
 Note that the setting of `ylim` has priority over the setting of `ymax`.
 
@@ -162,7 +167,7 @@ Currently, six types of curves are implemented, which are determined by the para
 1. $f(t)=x_1\cos(\sqrt{p_0} t)+x_2\cos(\sqrt{p_1}t)+x_3\cos(\sqrt{p_2}t)+...$ with $p_0=1$ and $p_i$ the i-th prime number
 1. $f(t)=1/\sqrt{2}(x_1+x_2(\sin(t)+\cos(t))+x_3(\sin(t)-\cos(t))+x_4(\sin(2t)+\cos(2t))+x_5(\sin(2t)-\cos(2t))+...)$
 
-With `deftype` the list of types can be quiered
+With `deftype` the list of types can be queried by
 
 ```{r}
 deftype(1)
@@ -170,10 +175,10 @@ deftype(1)
 
 A curve type consists of a function `function(n, t)` which computes a matrix of $(g_1(t), \ldots, g_n(t))$ and a default range for plotting, usually $-\pi$ till $\pi$.
 
-A new curve type can be implemented by number or name:
+A new curve type and a default plot range can be implemented by number or name:
 
 ```{r}
-deftype("sine", function(n, t) {
+deftype("sine", xlim = c(-pi, pi), function(n, t) {
   n <- as.integer(if (n<1) 1 else n)
   m <- matrix(NA, nrow=length(t), ncol=n)
   for (i in 1:n) m[,i] <- sin(i*t)

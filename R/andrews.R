@@ -43,7 +43,7 @@
 #' * Andrews, D. F. (1972) Plots of High-Dimensional Data. Biometrics, vol. 28, no. 1, pp. 125-136.
 #' * Khattree, R., Naik, D. N. (2002) Andrews Plots for Multivariate Data: Some New Suggestions and Applications. Journal of Statistical Planning and Inference, vol. 100, no. 2, pp. 411-425.
 #' @keywords hplot
-#' @author Sigbert Klinke <sigbert@hu-berlin.de>
+#' @author Sigbert Klinke <sigbert@hu-berlin.de>, Jaroslav Myslivec <jaroslav.myslivec@upce.cz>
 #' @return nothing
 #' @importFrom grDevices hsv rainbow col2rgb rgb
 #' @importFrom graphics plot.default

@@ -4,14 +4,14 @@
 \alias{deftype}
 \title{deftype}
 \usage{
-deftype(index = NULL, FUN = NULL, r = c(-pi, pi))
+deftype(index = NULL, FUN = NULL, xlim = c(-pi, pi))
 }
 \arguments{
 \item{index}{index/name of the function}
 
 \item{FUN}{function of the form \code{function(n, t) {...}}}
 
-\item{r}{default range for displaying curves (default: \code{c(-pi,pi)})}
+\item{xlim}{default range for displaying curves (default: \code{c(-pi,pi)})}
 }
 \value{
 either a list of all functions or a single function

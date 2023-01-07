@@ -4,7 +4,7 @@
 #'
 #' @param index index/name of the function
 #' @param FUN function of the form \code{function(n, t) {...}}
-#' @param r default range for displaying curves (default: `c(-pi,pi)`)
+#' @param xlim default range for displaying curves (default: `c(-pi,pi)`)
 #'
 #' @return either a list of all functions or a single function
 #' @export
@@ -21,11 +21,11 @@
 #' # query
 #' deftype()
 #' deftype("sine")
-deftype <- function(index=NULL, FUN=NULL, r=c(-pi,pi)) {
+deftype <- function(index=NULL, FUN=NULL, xlim=c(-pi,pi)) {
   if (is.null(index)) return(as.list(pkgenv))
   name <- as.character(index)
   if (is.null(FUN)) return(pkgenv[[name]])
   if (!is.null(pkgenv[[name]])) stop(sprintf("Function type '%s' exists already", name))
-  pkgenv[[name]] <- list(fun=FUN, range=range(r))
+  pkgenv[[name]] <- list(fun=FUN, range=range(xlim, na.rm = TRUE))
   invisible(pkgenv[[name]])
 }
