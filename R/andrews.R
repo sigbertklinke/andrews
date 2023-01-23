@@ -17,7 +17,7 @@
 #' levels and the default is [grDevices::rainbow()].
 #' If the length of `clr` is the number of rows of `df` then `clr` is interpreted as
 #' colors.
-#' @param df data frame
+#' @param df data frame or an R object that can be converted into a data frame with `as.data.frame`
 #' @param type type of curve
 #' * `1`: \eqn{f(t)=x_1/\sqrt{2}+x_2\sin(t)+x_3\cos(t)+x_4\sin(2t)+x_5\cos(2t)+...}
 #' * `2`: \eqn{f(t)=x_1\sin(t)+x_2\cos(t)+x_3\sin(2t)+x_4\cos(2t)+...}
@@ -171,7 +171,9 @@ andrews <- function(df, type = 1, clr = NULL, step = 100, ymax = 10, alpha=NULL,
     }
     clx
   }
-  stopifnot(is.data.frame(df))
+  #stopifnot(is.data.frame(df))
+  browser()
+  df  <- as.data.frame(df)
   ndf <- nrow(df)
   stopifnot(length(alpha) %in% c(0, 1, ndf))
   stopifnot(length(clr) %in% c(0, 1, ndf))

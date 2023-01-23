@@ -4,16 +4,23 @@
 \alias{normalize}
 \title{Normalization}
 \usage{
-normalize(ar)
+normalize(ar, type = 1)
 }
 \arguments{
 \item{ar}{numeric variable.}
+
+\item{type}{integer: type of normalization (default: \code{1})}
 }
 \value{
 Returns normalized variable.
 }
 \description{
-Normalization of variable.
+Normalization of a variable:
+\itemize{
+\item \code{type==1}: \code{ar} normalized into \eqn{[0,1]},
+\item \code{type==2}: \code{ar} is standardized,
+\item otherwise no normalization is done.
+}
 }
 \details{
 Normalization of variable: \code{ar<-(ar-min(ar))/(max(ar)-min(ar))}
