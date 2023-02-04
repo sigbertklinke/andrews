@@ -19,15 +19,16 @@ install.packages("andrews")
 
 From github
 
-Note that from github you install the current development version.
-
 ```R
 library("devtools")
 install_github("sigbertklinke/andrews")
 ```
 
+Note that from github you install the current development version.
+
 # History
 
+* 2023-02-04 version 1.1.1 - minor code and documentation changes
 * 2022-12-18 version 1.1.0 
 * 2022-12-16 new maintainer
 * 2012-10-29 version 1.0 by Jaroslav Myslivec

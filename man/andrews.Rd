@@ -18,7 +18,7 @@ andrews(
 )
 }
 \arguments{
-\item{df}{data frame}
+\item{df}{data frame or an R object that can be converted into a data frame with \code{as.data.frame}}
 
 \item{type}{type of curve
 \itemize{
@@ -26,18 +26,18 @@ andrews(
 \item \code{2}: \eqn{f(t)=x_1\sin(t)+x_2\cos(t)+x_3\sin(2t)+x_4\cos(2t)+...}
 \item \code{3}: \eqn{f(t)=x_1\cos(t)+x_2\cos(\sqrt{2t})+x_3\cos(\sqrt{3t})+...}
 \item \code{4}: \eqn{f(t)=0.5^{p/2}x_1+0.5^{(p-1)/2} x_2(\sin(t)+\cos(t))+0.5^{(p-2)/2} x_3(\sin(t)-\cos(t))+0.5^{(p-3)/2} x_4(\sin(2t)+\cos(2t))+0.5^{(p-4)/2}x_5(\sin(2t)-\cos(2t))+...)}
-with $p$ the number of variables
-\item \code{5}: \eqn{f(t)=x_1\cos(\sqrt{p_0} t)+x_2\cos(\sqrt{p_1}t)+x_3\cos(\sqrt{p_2}t)+...} with $p_0=1$ and $p_i$ the i-th prime number
+with \eqn{p} the number of variables
+\item \code{5}: \eqn{f(t)=x_1\cos(\sqrt{p_0} t)+x_2\cos(\sqrt{p_1}t)+x_3\cos(\sqrt{p_2}t)+...} with \eqn{p_0=1} and \eqn{p_i} the i-th prime number
 \item \code{6}: \eqn{f(t)=1/\sqrt{2}(x_1+x_2(\sin(t)+\cos(t))+x_3(\sin(t)-\cos(t))+x_4(\sin(2t)+\cos(2t))+x_5(\sin(2t)-\cos(2t))+...)}
 }}
 
-\item{clr}{number/name of column in the date frame for color of curves}
+\item{clr}{number/name of column in the data frame for color of curves}
 
 \item{step}{smoothness of curves}
 
-\item{ymax}{maximum of \code{y} coordinate.}
+\item{ymax}{maximum of \code{y} coordinate}
 
-\item{alpha}{semi-transparent color (\eqn{0 < alpha < 1}) which are supported only on some devices}
+\item{alpha}{semi-transparent color (\eqn{0 <= alpha <= 1}) which are supported only on some devices}
 
 \item{palcol}{a function which generates a set of colors, see details}
 
@@ -48,7 +48,7 @@ with $p$ the number of variables
 "blank", "solid", "dashed", "dotted", "dotdash", "longdash", or "twodash", where "blank"
 uses ‘invisible lines’ (i.e., does not draw them).}
 
-\item{...}{further parameters given to \code{\link[graphics:plot.default]{graphics::plot.default()}} except \code{x}, \code{y}, and \code{type}.}
+\item{...}{further named parameters given to \code{\link[graphics:plot.default]{graphics::plot.default()}} except \code{x}, \code{y}, and \code{type}.}
 }
 \value{
 nothing

@@ -17,19 +17,20 @@
 #' levels and the default is [grDevices::rainbow()].
 #' If the length of `clr` is the number of rows of `df` then `clr` is interpreted as
 #' colors.
+#'
 #' @param df data frame or an R object that can be converted into a data frame with `as.data.frame`
 #' @param type type of curve
 #' * `1`: \eqn{f(t)=x_1/\sqrt{2}+x_2\sin(t)+x_3\cos(t)+x_4\sin(2t)+x_5\cos(2t)+...}
 #' * `2`: \eqn{f(t)=x_1\sin(t)+x_2\cos(t)+x_3\sin(2t)+x_4\cos(2t)+...}
 #' * `3`: \eqn{f(t)=x_1\cos(t)+x_2\cos(\sqrt{2t})+x_3\cos(\sqrt{3t})+...}
 #' * `4`: \eqn{f(t)=0.5^{p/2}x_1+0.5^{(p-1)/2} x_2(\sin(t)+\cos(t))+0.5^{(p-2)/2} x_3(\sin(t)-\cos(t))+0.5^{(p-3)/2} x_4(\sin(2t)+\cos(2t))+0.5^{(p-4)/2}x_5(\sin(2t)-\cos(2t))+...)}
-#' with $p$ the number of variables
-#' * `5`: \eqn{f(t)=x_1\cos(\sqrt{p_0} t)+x_2\cos(\sqrt{p_1}t)+x_3\cos(\sqrt{p_2}t)+...} with $p_0=1$ and $p_i$ the i-th prime number
+#' with \eqn{p} the number of variables
+#' * `5`: \eqn{f(t)=x_1\cos(\sqrt{p_0} t)+x_2\cos(\sqrt{p_1}t)+x_3\cos(\sqrt{p_2}t)+...} with \eqn{p_0=1} and \eqn{p_i} the i-th prime number
 #' * `6`: \eqn{f(t)=1/\sqrt{2}(x_1+x_2(\sin(t)+\cos(t))+x_3(\sin(t)-\cos(t))+x_4(\sin(2t)+\cos(2t))+x_5(\sin(2t)-\cos(2t))+...)}
 #'
-#' @param clr number/name of column in the date frame for color of curves
+#' @param clr number/name of column in the data frame for color of curves
 #' @param step smoothness of curves
-#' @param ymax maximum of `y` coordinate.
+#' @param ymax maximum of `y` coordinate
 #' @param palcol a function which generates a set of colors, see details
 #' @param alpha semi-transparent color (\eqn{0 < alpha < 1}) which are supported only on some devices
 #' @param lwd line width, a positive number, defaulting to 1.
@@ -37,7 +38,8 @@
 #'  2=dashed, 3=dotted, 4=dotdash, 5=longdash, 6=twodash) or as one of the character strings
 #'  "blank", "solid", "dashed", "dotted", "dotdash", "longdash", or "twodash", where "blank"
 #'  uses ‘invisible lines’ (i.e., does not draw them).
-#' @param ... further parameters given to [graphics::plot.default()] except `x`, `y`, and `type`.
+#' @param ... further named parameters given to [graphics::plot.default()] except `x`, `y`, and `type`.
+#'
 #' @details Andrews curves transform multidimensional data into curves. This package presents four types of curves.
 #' @references
 #' * Andrews, D. F. (1972) Plots of High-Dimensional Data. Biometrics, vol. 28, no. 1, pp. 125-136.
@@ -57,67 +59,8 @@
 #' andrews(iris,clr=5,ymax=3)
 #' par(op)
 #' andrews(iris,type=4,clr=5,ymax=NA)
-andrews <- function(df, type = 1, clr = NULL, step = 100, ymax = 10, alpha=NULL, palcol=NULL,
-                    lwd=1, lty="solid", ...) {
-  typematrix <- function(t, n, type) {
-    m <- NULL
-    if (type==1) {
-      m <- matrix(1/sqrt(2), nrow=length(t), ncol=1)
-      if (n>1) {
-        ff <- (1:n)%/%2
-        for (i in 2:n) {
-          m <- cbind(m, if (i%%2) cos(ff[i]*t) else sin(ff[i]*t))
-        }
-      }
-    }
-    if (type==2) {
-      m  <- matrix(NA, nrow=length(t), ncol=0)
-      ff <- 1+((0:(n-1))%/%2)
-      for (i in 1:n) {
-        m <- cbind(m, if (i%%2) sin(ff[i]*t) else cos(ff[i]*t))
-      }
-    }
-    if (type==3) {
-      m <- cos(sqrt(t))
-      if (n>1) {
-        for (i in 2:n) {
-          m <- cbind(m, cos(sqrt(i*t)))
-        }
-      }
-    }
-    if (type==4) {
-      s2 <- 0.5^(n/2)
-      m  <- matrix(s2, nrow=length(t), ncol=1)
-      if (n>1) {
-        ff <- (1:n)%/%2
-        for (i in 2:n) {
-          s2  <- s2*sqrt(2)
-          fft <- ff[i]*t
-          m <- cbind(m, s2*if (i%%2) sin(fft)-cos(fft) else sin(fft)+cos(fft))
-        }
-      }
-    }
-    if (type==5) {
-      pr <- sqrt(c(1, generate_n_primes(n-1)))
-      m  <- matrix(NA, nrow=length(t), ncol=0)
-      for (i in 1:n) {
-        m <- cbind(m, cos(pr[i]*t))
-      }
-    }
-    if (type==6) {
-      m  <- matrix(1, nrow=length(t), ncol=1)
-      if (n>1) {
-        ff <- (1:n)%/%2
-        for (i in 2:n) {
-          fft <- ff[i]*t
-          m <- cbind(m, if (i%%2) sin(fft)-cos(fft) else sin(fft)+cos(fft))
-        }
-      }
-      m <- m/sqrt(2)
-    }
-    if (is.null(m)) stop (sprintf("Unknown 'type': %s", as.character(type)))
-    structure(m, dimnames=NULL)
-  }
+andrews <- function(df, type = 1, clr = NULL, step = 100, ymax = 10,
+                    alpha=NULL, palcol=NULL, lwd=1, lty="solid", ...) {
   # https://stackoverflow.com/questions/13289009/check-if-character-string-is-a-valid-color-representation
   areColors <- function(x) {
     sapply(x, function(X) {
@@ -167,12 +110,11 @@ andrews <- function(df, type = 1, clr = NULL, step = 100, ymax = 10, alpha=NULL,
       alpha[alpha>1] <- 1
       if (length(alpha)==1) alpha <- rep(alpha[1], ndf)
       clx <- col2rgb(clx)
-      clx <- rgb(clx[1,], clx[2,], clx[3,], 256*alpha, maxColorValue = 255)
+      clx <- rgb(clx[1,], clx[2,], clx[3,], 255*alpha, maxColorValue = 255)
     }
     clx
   }
   #stopifnot(is.data.frame(df))
-  browser()
   df  <- as.data.frame(df)
   ndf <- nrow(df)
   stopifnot(length(alpha) %in% c(0, 1, ndf))
@@ -193,6 +135,9 @@ andrews <- function(df, type = 1, clr = NULL, step = 100, ymax = 10, alpha=NULL,
   type      <- names(pkgenv)[index]
   #
   args      <- list(...)
+  if (length(args)>0) {
+    if (is.null(names(args)) || ('' %in% names(args))) stop("Only named parameters allowed in ...!")
+  }
   args$xlim <- if(is.null(args$xlim)) pkgenv[[type]]$range else args$xlim
   coorx     <- seq(args$xlim[1], args$xlim[2], by=diff(args$xlim)/step)
   #
