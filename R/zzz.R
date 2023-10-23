@@ -42,7 +42,7 @@ pkgenv <- new.env()
   })
   deftype(5, xlim=c(0,4*pi), function(n, t) {
     n  <- as.integer(if (n<1) 1 else n)
-    pr <- sqrt(generate_n_primes(n-1, TRUE))
+    pr <- sqrt(generate_n_primes(n, TRUE))
     m  <- matrix(NA, nrow=length(t), ncol=n)
     for (i in 1:n) {
       m[,i] <- cos(pr[i]*t)
