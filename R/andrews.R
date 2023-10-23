@@ -49,7 +49,6 @@
 #' @return nothing
 #' @importFrom grDevices hsv rainbow col2rgb rgb
 #' @importFrom graphics plot.default
-#' @importFrom primes generate_n_primes
 #' @export
 #'
 #' @examples

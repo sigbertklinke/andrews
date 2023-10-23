@@ -37,7 +37,7 @@ with \eqn{p} the number of variables
 
 \item{ymax}{maximum of \code{y} coordinate}
 
-\item{alpha}{semi-transparent color (\eqn{0 <= alpha <= 1}) which are supported only on some devices}
+\item{alpha}{semi-transparent color (\eqn{0 < alpha < 1}) which are supported only on some devices}
 
 \item{palcol}{a function which generates a set of colors, see details}
 

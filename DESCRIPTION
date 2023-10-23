@@ -1,7 +1,7 @@
 Package: andrews
 Type: Package
 Title: Various Andrews Curves
-Version: 1.1.1
+Version: 1.1.2
 Authors@R: 
   c(person("Jaroslav", "Myslivec",  email="jaroslav.myslivec@upce.cz", role="aut"),
     person("Sigbert", "Klinke", email="sigbert@hu-berlin.de", role=c("cre", "ctb")))
@@ -18,7 +18,7 @@ Roxygen: list(markdown = TRUE)
 Imports:
     grDevices,
     graphics,
-    primes
+    gmp
 Suggests: 
     knitr,
     rmarkdown,
