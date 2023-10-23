@@ -12,7 +12,7 @@ generate_n_primes(n, one = FALSE)
 \item{one}{should \code{1} included in the sequence (default: \code{FALSE})}
 }
 \value{
-An integer vector of prime numbers
+an integer vector of prime numbers
 }
 \description{
 Generates a vector of the first \code{n} primes using \code{\link[gmp:nextprime]{gmp::nextprime()}}.
